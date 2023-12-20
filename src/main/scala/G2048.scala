@@ -25,6 +25,7 @@ class G2048 {
   var lemptyX: List[Int] = List()
   var lemptyY: List[Int] = List()
   var nbalea = 0
+  var score = 0
 
 
   // Début du jeux
@@ -69,7 +70,7 @@ class G2048 {
 
   // Déplacement jeux
   def deplajeux(): Unit = {
-    for (z <- 0 until 2) {
+    for (z <- 0 until 3) {
       peuxdeplace = true
       while (peuxdeplace) {
         for (i <- tabgame.indices) {
@@ -86,8 +87,9 @@ class G2048 {
             // addition de case
             try {
               // && tabgame(i)(j) != tabgame(i + mvmY * 2)(j + mvmX * 2) || temp marche pas
-              if (tabgame(i)(j) != 0 && tabgame(i)(j) == tabgame(i + mvmY)(j + mvmX)) {
+              if (tabgame(i)(j) != 0 && tabgame(i)(j) == tabgame(i + mvmY)(j + mvmX) ) {
                 tabgame(i + mvmY)(j + mvmX) = tabgame(i)(j) * 2
+                score += tabgame(i)(j) * 2
                 tabgame(i)(j) = 0
               }
             } catch {
@@ -136,12 +138,17 @@ class G2048 {
           case 512 => couCase = Color.orange
           case 1024 => couCase = Color.pink
           case 2048 => couCase = Color.yellow
+          case 4096 => couCase = Color.BLACK
         }
         fg.setColor(couCase)
         fg.drawFillRect(200 + 50*j,200+50*i,50,50)
         fg.setColor(Color.black)
         fg.drawRect(200 + 50*j,200+50*i,50,50)
-        fg.drawFancyString(215 + 50*j,225+50*i,tabgame(i)(j).toString,Color.BLACK,20)
+        //fg.drawFancyString(215 + 50*j,225+50*i,tabgame(i)(j).toString,Color.BLACK,20)
+        fg.drawString(218 + 50*j,230+50*i,tabgame(i)(j).toString,Color.BLACK,20)
+        fg.setColor(Color.WHITE)
+        fg.drawFillRect(145,20,120,40)
+        fg.drawString(30,50,s"score: $score",Color.BLACK,40)
 
       }
       println("")
