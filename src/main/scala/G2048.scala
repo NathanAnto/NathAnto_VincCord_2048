@@ -25,6 +25,7 @@ class G2048 {
   var lemptyX: List[Int] = List()
   var lemptyY: List[Int] = List()
   var nbalea = 0
+  var yalea = 0
   var score = 0
 
 
@@ -80,6 +81,7 @@ class G2048 {
               if (tabgame(i)(j) != 0 && tabgame(i + mvmY)(j + mvmX) == 0) {
                 tabgame(i + mvmY)(j + mvmX) = tabgame(i)(j)
                 tabgame(i)(j) = 0
+                yalea += 1
               }
             } catch {
               case e => peuxdeplace = false
@@ -87,10 +89,16 @@ class G2048 {
             // addition de case
             try {
               // && tabgame(i)(j) != tabgame(i + mvmY * 2)(j + mvmX * 2) || temp marche pas
-              if (tabgame(i)(j) != 0 && tabgame(i)(j) == tabgame(i + mvmY)(j + mvmX) ) {
+              /*if(tabgame(i)(j) != 0 && tabgame(i)(j) == tabgame(i + mvmY)(j + mvmX) && tabgame(i + (mvmY * 2))(j + (mvmX * 2)) == tabgame(i)(j)){
+                tabgame(i + (mvmY * 2))(j + (mvmX * 2)) = tabgame(i + mvmY)(j + mvmX)
+                score += tabgame(i + mvmY)(j + mvmX) * 2
+                tabgame(i + mvmY)(j + mvmX) = 0
+                yalea += 1
+              } else*/ if (tabgame(i)(j) != 0 && tabgame(i)(j) == tabgame(i + mvmY)(j + mvmX) ) {
                 tabgame(i + mvmY)(j + mvmX) = tabgame(i)(j) * 2
                 score += tabgame(i)(j) * 2
                 tabgame(i)(j) = 0
+                yalea += 1
               }
             } catch {
               case f => print("")
@@ -104,18 +112,22 @@ class G2048 {
 
   // nouveau nombre (viens après déplacement)
   def nouveaunbre(): Unit = {
-    for (i <- tabgame.indices) {
-      for (j <- tabgame(i).indices) {
-        if (tabgame(i)(j) == 0) {
-          lemptyX = lemptyX :+ j
-          lemptyY = lemptyY :+ i
+    if(yalea != 0){
+      for (i <- tabgame.indices) {
+        for (j <- tabgame(i).indices) {
+          if (tabgame(i)(j) == 0) {
+            lemptyX = lemptyX :+ j
+            lemptyY = lemptyY :+ i
+          }
         }
       }
+      nbalea = Random.nextInt(lemptyX.length - 1)
+      tabgame(lemptyY(nbalea))(lemptyX(nbalea)) = 2
+      lemptyX = List()
+      lemptyY = List()
     }
-    nbalea = Random.nextInt(lemptyX.length - 1)
-    tabgame(lemptyY(nbalea))(lemptyX(nbalea)) = 2
-    lemptyX = List()
-    lemptyY = List()
+    yalea = 0
+
   }
 
 
